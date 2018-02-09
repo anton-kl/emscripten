@@ -147,8 +147,11 @@ var emscriptenMemoryProfiler = {
   },
 
   onRealloc: function onRealloc(oldAddress, newAddress, size) {
-    this.onFree(oldAddress);
-    this.onMalloc(newAddress, size);
+    var oldSize = this.allocatedPtrSizes[oldAddress];
+    if (!isNaN(oldSize)) {
+      this.onFree(oldAddress);
+      this.onMalloc(newAddress, size);
+    }
   },
 
   onPreloadComplete: function onPreloadComplete() {
